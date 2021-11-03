@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/src/csc4997/project/project/source
+CMAKE_SOURCE_DIR = /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/src/csc4997/project/project/build
+CMAKE_BINARY_DIR = /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Mesh.dir/depend.make
@@ -58,17 +58,17 @@ include CMakeFiles/Mesh.dir/progress.make
 include CMakeFiles/Mesh.dir/flags.make
 
 CMakeFiles/Mesh.dir/mesh.cpp.o: CMakeFiles/Mesh.dir/flags.make
-CMakeFiles/Mesh.dir/mesh.cpp.o: /mnt/c/src/csc4997/project/project/source/mesh.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/src/csc4997/project/project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Mesh.dir/mesh.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Mesh.dir/mesh.cpp.o -c /mnt/c/src/csc4997/project/project/source/mesh.cpp
+CMakeFiles/Mesh.dir/mesh.cpp.o: /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source/mesh.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Mesh.dir/mesh.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Mesh.dir/mesh.cpp.o -c /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source/mesh.cpp
 
 CMakeFiles/Mesh.dir/mesh.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Mesh.dir/mesh.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/src/csc4997/project/project/source/mesh.cpp > CMakeFiles/Mesh.dir/mesh.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source/mesh.cpp > CMakeFiles/Mesh.dir/mesh.cpp.i
 
 CMakeFiles/Mesh.dir/mesh.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Mesh.dir/mesh.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/src/csc4997/project/project/source/mesh.cpp -o CMakeFiles/Mesh.dir/mesh.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source/mesh.cpp -o CMakeFiles/Mesh.dir/mesh.cpp.s
 
 # Object files for target Mesh
 Mesh_OBJECTS = \
@@ -80,7 +80,7 @@ Mesh_EXTERNAL_OBJECTS =
 libMesh.a: CMakeFiles/Mesh.dir/mesh.cpp.o
 libMesh.a: CMakeFiles/Mesh.dir/build.make
 libMesh.a: CMakeFiles/Mesh.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/src/csc4997/project/project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libMesh.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libMesh.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/Mesh.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Mesh.dir/link.txt --verbose=$(VERBOSE)
 
@@ -94,6 +94,6 @@ CMakeFiles/Mesh.dir/clean:
 .PHONY : CMakeFiles/Mesh.dir/clean
 
 CMakeFiles/Mesh.dir/depend:
-	cd /mnt/c/src/csc4997/project/project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/src/csc4997/project/project/source /mnt/c/src/csc4997/project/project/source /mnt/c/src/csc4997/project/project/build /mnt/c/src/csc4997/project/project/build /mnt/c/src/csc4997/project/project/build/CMakeFiles/Mesh.dir/DependInfo.cmake --color=$(COLOR)
+	cd /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/source /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build /mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/Mesh.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Mesh.dir/depend
 
