@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/src/csc4997/project/project/source/parser.cpp
+parser.h
+/mnt/c/src/csc4997/project/project/source/parser.h
+
+/mnt/c/src/csc4997/project/project/source/parser.h
+fstream
+-
+string
+-
+iostream
+-
+

@@ -1,0 +1,5 @@
+/mnt/c/src/csc4997/project/project/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/src/csc4997/project/project/build/CMakeFiles/edit_cache.dir
+/mnt/c/src/csc4997/project/project/build/CMakeFiles/PD_Sim.dir
+/mnt/c/src/csc4997/project/project/build/CMakeFiles/Parser.dir
+/mnt/c/src/csc4997/project/project/build/CMakeFiles/Mesh.dir

@@ -1,0 +1,15 @@
+need to do:
+	acceleration function
+	displacement function
+	
+	output to csv function
+
+	simulation "control" (control output, call mesh functions, plausibly timer)
+		the control should have the parser
+
+	~~
+
+	parallelize with HPX
+
+	replace for loops with hpx::parallel for loops when possible
+	use hpx::async and hpx::future to do computation and output
