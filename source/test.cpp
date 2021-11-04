@@ -3,11 +3,9 @@
 
 int main()
 {
-	Mesh m = Mesh(25);
+	Mesh m = Mesh(15);
 
-	std::cout << 25*25*25 << " points in configuration:\n";
-	for( size_t i = 0; i < 25*25*25; ++i )
-		std::cout << m.pos(i) << std::endl;
+	std::cout << std::endl << 15*15*15 << " points in configuration:\n\n\n";
 
 	return 0;
 }

@@ -1,5 +1,0 @@
-/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/rebuild_cache.dir
-/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/edit_cache.dir
-/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/PD_Sim.dir
-/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/Parser.dir
-/mnt/c/src/csc4997/project/PeridynamicsSimulationProject/build/CMakeFiles/Mesh.dir

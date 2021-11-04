@@ -1,7 +1,8 @@
+#define _USE_MATH_DEFINES
 #pragma once
 #include <vector>
 #include <iostream>
-#include <cmath>
+#include "math.h"
 
 #include "parser.h"
 
@@ -9,6 +10,8 @@
 
 struct vec3D
 {
+	std::vector<size_t> nbhd;
+
 	double x, y, z;
 	vec3D( double x=0, double y=0, double z=0 );
 	
@@ -29,11 +32,16 @@ class Mesh
 		std::vector<vec3D> _positions;
 		std::vector<double> _volumes;
 		size_t _lx, _ly, _lz;
-		double _c, _sc;
+		double _c, _sc, _delta;
 		Parser _p;
 
 		void _init();
-		size_t _mu( size_t i, size_t j);
+		void _fillNbhd( size_t k );
+		void _fillNbhdOutput( size_t k=7*7*7 );
+		void _fillNbhdOutputOld( bool output=false );
+		bool _distanceAssertLessThanDelta( vec3D u, vec3D v );
+		size_t _mu( size_t i, size_t j );
+		vec3D _netForce( size_t i );
 
 	public:
 		Mesh();		//for lx = ly = lz = BEEEG
@@ -48,5 +56,7 @@ class Mesh
 
 		double stretch( size_t i, size_t j );		//stretch between xi and xj at time t
 		vec3D pwForce( size_t i, size_t j);	//pair-wise force between xi and xj at time t
+		void netForce();
+		
 };
 

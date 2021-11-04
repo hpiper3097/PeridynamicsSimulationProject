@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.10.1)
 
-project (PD_Sim, CXX)
+set(projectName PD_Sim)
 
-add_library(Mesh STATIC mesh.cpp)
-add_library(Parser STATIC parser.cpp)
+project (${projectName}, CXX)
 
-target_link_libraries( Mesh
-	PRIVATE Parser
-	)
+add_library(Mesh mesh.cpp)
+add_library(Parser parser.cpp)
 
-add_executable(PD_Sim test.cpp)
+target_link_libraries( Mesh PRIVATE Parser )
 
-target_link_libraries( PD_Sim
-	PUBLIC Mesh
-	)
+add_executable(PD_Sim_Serial test.cpp)
+
+target_link_libraries( PD_Sim_Serial PUBLIC Mesh )
