@@ -1,213 +1,116 @@
 #include "mesh.h"
 
-vec3D::vec3D( double x, double y, double z )
-	: x(x), y(y), z(z) {}
-
-vec3D vec3D::operator +( const vec3D rhs )
-{
-	return vec3D(x+rhs.x, y+rhs.y, z+rhs.z);
-}
-
-vec3D vec3D::operator -( const vec3D rhs )
-{
-	return vec3D(x-rhs.x, y-rhs.y, z-rhs.z);
-}
-
-vec3D vec3D::operator *( const double r )
-{
-	return vec3D(r*x, r*y, r*z);
-}
-
-vec3D vec3D::operator /( const double r )
-{
-	return (r != 0) ? vec3D(x/r, y/r, z/r) : vec3D();
-}
-
-std::ostream& operator<<( std::ostream& os, const vec3D& vec )
-{
-	return os << "(" << vec.x << "," << vec.y << "," << vec.z << ")";
-}
-
-double distanceSq( vec3D u, vec3D v )
-{
-	return std::pow(u.x - v.x, 2) + std::pow(u.y - v.y, 2) + std::pow(u.z - v.z, 2);
-}
-
-double distance( vec3D u, vec3D v )
-{
-	return std::sqrt( distanceSq(u, v) );
-}
+const double DELTA = 0.35;
 
 Mesh::Mesh()
 {
-	_lx = _ly = _lz = BEEEG;
-	_init();
-	gen();
-	_fillNbhd( _lx*_ly*_lz );
 }
 
-Mesh::Mesh( size_t alt_sz )
+Mesh::Mesh(size_t parts)
 {
-	_lx = _ly = _lz = alt_sz;
-	_init();
-	gen();
-	_fillNbhdOutput( _lx*_ly*_lz );
+    init(parts, true);
 }
 
-void Mesh::_init()
+//fill _neighborhoodNest 'parts' cubed empty vectors.  parts references the number of pieces each dimension is split into
+void Mesh::init( size_t parts, bool output )
 {
-	_p = Parser();
-	_delta = _p.delta();
-	_c = 18*_p.K()/_p.delta()/M_PI;
-	_sc = 5/12* std::sqrt(
-			_p.Kic() / ( _p.K()*_p.K()*_p.delta() ) );
+    _parts = parts;
+    _totalNodes = parts*parts*parts;
+    for (size_t i = 0; i < _totalNodes; i++) {
+        std::vector<size_t> tmp;
+        _neighborhoodNest.push_back(tmp);
+    }
+
+    _generateNodes();
+    _calculateNeighborhoods(DELTA);
+
+    if(output)
+    {
+        std::cout << "nbhd size = " << _neighborhoodNest.size() << std::endl;
+        std::cout << "node count = " << _totalNodes << std::endl;
+        printNodes();
+    }
 }
 
-void Mesh::gen()
+void Mesh::_generateNodes()
 {
-	for ( size_t x = 0; x < _lx; ++x )
-		for ( size_t y = 0; y < _ly; ++y )
-			for ( size_t z = 0; z < _lz; ++z )
-				_positions.push_back( vec3D(x, y, z) );
+    for(size_t cnt = 0; cnt < _totalNodes; cnt++)
+    {
+        Node tmpNode = Node(cnt, _parts);
+        _nodes.push_back(tmpNode);
+    }
 }
 
-void Mesh::_fillNbhd( size_t k )
+void Mesh::_calculateNeighborhoods( double delta )
 {
-	size_t a, b, c, j;
-	vec3D v = vec3D();
-	for ( size_t i = 0; i < k; ++i ) {
-		v = _positions[i];
-		for ( a = _delta; a >= 0 && a <= _delta; a-- ) {
-			for ( b = 0; b <= _delta - a; ++b ) {
-				for ( c = 0; c <= _delta - a - b; ++c ) {
-					if ((v.x+a < _lx) && (v.y+b < _ly) && (v.z+c < _lz)) 
-						//don't touch anything outside our bounds
-					{
-						j = (v.x + a) * _ly * _lz
-								+ (v.y + b) * _lz
-								+ (v.z + c);
-						_positions[i].nbhd.push_back(j);	
-						_positions[j].nbhd.push_back(i);
-					}
-				}
-			}
-		}	
-	}
+    std::for_each( _nodes.begin(), _nodes.end(), 
+        [delta, this]( const Node fix )
+        {
+            std::for_each( _nodes.begin(), _nodes.end(), 
+                [delta, fix, this]( const Node mov )
+                {
+                    if( distance( fix.pos(), mov.pos() ) <= delta )
+                        _neighborhoodNest.at(fix.id()).push_back( mov.id() );
+                }
+            );
+        }
+    );
 }
 
-bool Mesh::_distanceAssertLessThanDelta( vec3D u, vec3D v )
+void Mesh::update()
 {
-	return  (distance(u, v) <= _delta);
+    _updatePwForce();
+    _updateAcceleration();
+    _updateDisplacement();
+    _updatePosition();
+    _updateVolume();
 }
 
-void Mesh::_fillNbhdOutput( size_t k )
+void Mesh::_updatePwForce()
 {
-	size_t a, b, c, j;
-	vec3D v = vec3D();
-	for ( size_t i = 0; i < _positions.size(); ++i ) {
-		std::cout << i << ":\n";
-		v = _positions[i];
-		for ( a = _delta; a >= 0 && a <= _delta; a-- ) {
-			for ( b = 0; b <= _delta - a; ++b ) {
-				for ( c = 0; c <= _delta - a - b; ++c ) {
-					if ((v.x+a < _lx) && (v.y+b < _ly) && (v.z+c < _lz))
-					{
-						j = (v.x + a) * _ly * _lz
-								+ (v.y + b) * _lz
-								+ (v.z + c);
-						if(i != j )//&& _distanceAssertLessThanDelta( v, _positions[j]))
-						{
-							std::cout << "\t" << j << ":\n";
-							_positions[i].nbhd.push_back(j);	
-							_positions[j].nbhd.push_back(i);
-							std::cout << "\t" <<
-								_positions[i] << " affects "
-								<< _positions[j] << ".\n";
-						}
-					}
-				}
-			}
-		}	
-	}
+
 }
 
-void Mesh::_fillNbhdOutputOld( bool output )
+void Mesh::_updateAcceleration()
 {
-	for ( size_t k = 0; k < _positions.size(); ++k ) {
-		if( output )
-			std::cout << k << ":\n";
-		for ( size_t l = 0; l < _positions.size(); ++l ) {
-			if ( distanceSq( _positions[k], _positions[l] ) < _delta*_delta ) {
-				_positions[k].nbhd.push_back(l);
-				if( output )
-					std::cout << "\t" <<
-						_positions[k] << " to " << _positions[l]
-						<< " < " << _delta << ".\n";
-			}
-		}
-	}
+
 }
 
-vec3D Mesh::pos( size_t k )
+void Mesh::_updateDisplacement()
 {
-	return _positions[k];
+
 }
 
-void Mesh::wpos( size_t k, vec3D v )
+void Mesh::_updatePosition()
 {
-	_positions[k] = v;
+
 }
 
-vec3D Mesh::indexToX0( size_t k )
+void Mesh::_updateVolume()
 {
-	// k = x * _ly * _lz + y * _lz + z
-	vec3D v0 = vec3D();
 
-	while ( k >= _lz )
-	{
-		while ( k >= _lz * _ly )
-		{
-			++(v0.x);
-			k -= _lz * _ly;
-		}
-		++(v0.y);
-		k -= _lz;
-	}
-	(v0.x) += k;
-	return v0;
 }
 
-double Mesh::stretch( size_t i, size_t j )
+void Mesh::printNodes()
 {
-	return (distance(pos(j), pos(i)) - distance(indexToX0(j), indexToX0(i))) / 
-		distance(indexToX0(j), indexToX0(i));
+    std::for_each( _nodes.cbegin(), _nodes.cend(), 
+        []( Node nod )
+        {
+            nod.printInfo();
+        }
+    );
 }
 
-size_t Mesh::_mu( size_t i, size_t j)
-{
-	return (stretch(i, j) < _sc) ? 1 : 0;
+//driver code
+int main() {
+    //..testing for 0 nodes, 1 node, 20 nodes, and 700 nodes
+
+    Mesh cont(3);
+
+    IO<size_t> io( "neighborhoods.csv" );
+    io.write2DArrayToCSV( cont.neighborhoodNest() );
+
+    std::getchar();
+
+    return 0;
 }
-
-vec3D Mesh::pwForce( size_t i, size_t j)
-{
-	return (pos(j) - pos(i)) / distance(pos(j), pos(i)) * stretch(i, j) * _mu(i, j) * _c ;
-}
-
-vec3D Mesh::_netForce( size_t i )
-{
-	vec3D net = vec3D();
-
-	//need to iterate through neighborhood
-	
-	return net;
-}
-
-void Mesh::netForce()
-{
-	size_t i = 0;
-	while ( i < _lx*_ly*_lz )	
-		_netForce(i++);
-}
-
-
-
